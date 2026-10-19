@@ -261,13 +261,12 @@ public class Service extends IntentService {
         final String line = new String(body, StandardCharsets.UTF_8).split("\n", 2)[0].trim();
         final String[] metadata = line.split(" ");
         if (metadata.length < 4 || metadata[0].isEmpty()
-                || metadata[2].isEmpty() || metadata[3].isEmpty()) {
+                || metadata[2].isEmpty() || metadata[3].isEmpty()
+                || !metadata[1].matches("[0-9]+")) {
             throw new IOException("malformed update information from the update server");
         }
         try {
-            if (Long.parseLong(metadata[1]) < 0) {
-                throw new IOException("negative build date in update information");
-            }
+            Long.parseLong(metadata[1]);
         } catch (final NumberFormatException e) {
             throw new IOException("malformed build date in update information", e);
         }
